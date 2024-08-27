@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.EasyMDEContainer h1 {
+    @apply text-4xl font-bold mb-5
+}
+
+.EasyMDEContainer h2 {
+    @apply text-2xl font-bold mb-3
+}
+
+.EasyMDEContainer h3 {
+    @apply text-lg font-bold mb-3
+}
+
+/* Paragraf Stilleri */
+.EasyMDEContainer p {
+    @apply mb-4 text-base leading-relaxed;
+}
+
+/* Liste Stilleri */
+.EasyMDEContainer ul,
+.EasyMDEContainer ol {
+    @apply list-disc pl-5 mb-4;
+}
+
+.EasyMDEContainer ol {
+    @apply list-decimal;
+}
+
+.EasyMDEContainer li {
+    @apply mb-1;
+}
+
+/* Kod Bloğu Stilleri */
+.EasyMDEContainer pre {
+    @apply bg-gray-100 border border-gray-200 p-4 rounded-md overflow-x-auto;
+}
+
+.EasyMDEContainer code {
+    @apply bg-gray-100 text-gray-800 px-1 py-0.5 rounded;
+}
+
+/* Alıntı Stilleri */
+.EasyMDEContainer blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4;
+}
+
+/* Bağlantı Stilleri */
+.EasyMDEContainer a {
+    @apply text-blue-500 hover:underline;
+}
+
+/* Görsel Stilleri */
+.EasyMDEContainer img {
+    @apply max-w-full h-auto rounded-md shadow-sm;
+}
+
+/* Tablo Stilleri */
+.EasyMDEContainer table {
+    @apply min-w-full divide-y divide-gray-200;
+}
+
+.EasyMDEContainer th,
+.EasyMDEContainer td {
+    @apply px-6 py-3 text-left text-sm font-medium text-gray-900;
+}
+
+.EasyMDEContainer th {
+    @apply bg-gray-100 border-b border-gray-200;
+}
+
+.EasyMDEContainer tr:nth-child(even) {
+    @apply bg-gray-50;
+}
+
+.EasyMDEContainer td {
+    @apply border-b border-gray-200;
+}
