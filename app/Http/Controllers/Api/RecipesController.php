@@ -13,7 +13,7 @@ class RecipesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function allRecipes()
+    public function allRecipes(Request $request)
     {
         $recipes = Recipes::all();
         if (count($recipes) > 0) {

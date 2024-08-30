@@ -15,6 +15,6 @@ class CarouselPhotoController extends Controller
         if (count($photos) > 0) {
             return response()->json($photos, 200);
         }
-        return response()->json($photos, 404);
+        return response()->json(['message' => 'No photos found'], 404);
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Recipes;
 use App\Models\Categories;
+use App\Models\Customers;
 
 class HomeController extends Controller
 {
@@ -15,10 +17,10 @@ class HomeController extends Controller
     public function index()
     {
         $stats = (object) [
-            'totalUsers' => 150,
-            'totalRecipes' => 1200,
+            'totalUsers' => Customers::all()->count(),
+            'totalRecipes' => Recipes::all()->count(),
+            'totalCategories' => Categories::all()->count(),
             'totalDownloads' => 3400,
-            'totalCategories' => 45,
         ];
 
         return view('pages.admin.index', compact('stats'));

@@ -12,7 +12,7 @@ Route::get('/', function () {
 });
 
 Route::prefix('admin')->group(function () {
-    Route::get('/login', [AuthController::class, 'adminLoginIndex'])->name('admin.login');
+    Route::get('/giris', [AuthController::class, 'adminLoginIndex'])->name('admin.login');
     Route::get('/', [HomeController::class, 'index'])->name('admin.index');
     Route::get('/kullanicilar', [HomeController::class, 'adminUsersIndex'])->name('admin.users');
     Route::get('/tarifler', [RecipesController::class, 'index'])->name('admin.recipes');
