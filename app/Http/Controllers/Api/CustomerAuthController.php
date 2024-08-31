@@ -54,7 +54,7 @@ class CustomerAuthController extends Controller
                 ]);
             }
 
-            return response()->json(['access_token' => $token, 'token_type' => 'Bearer', 'customer' => $customer, 'message' => 'Giriş işlemi başarıyla tamamlandı.', 'status' => 'success'], 200);
+            return response()->json(['access_token' => $token, 'token_type' => 'Bearer', 'customer' => $customer, 'message' => 'Başarıyla giriş yaptınız.', 'status' => 'success'], 200);
         } else {
             return response()->json(['message' => 'Kullanıcı adı ya da sifre hatalı!', 'status' => 'error'], 404);
         }
@@ -69,5 +69,11 @@ class CustomerAuthController extends Controller
         } else {
             return response()->json(['message' => 'Token geçersiz veya süresi dolmuş.', 'status' => 'error'], 401);
         }
+    }
+
+    public function customerLogout(Request $request)
+    {
+        Tokens::where('token', $request->header('Authorization'))->delete();
+        return response()->json(['message' => 'Çıkış işleminiz tamamlanmıştır.'], 200);
     }
 }
