@@ -33,6 +33,6 @@ class Customers extends Model
 
     public function favoriteRecipes()
     {
-        return $this->hasMany(CustomerFavoriteRecipes::class);
+        return $this->hasMany(CustomerFavoriteRecipes::class, 'customer_id');
     }
 }

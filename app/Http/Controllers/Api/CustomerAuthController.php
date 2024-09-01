@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customers;
+use App\Models\Recipes;
 use App\Models\Tokens;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -56,7 +57,7 @@ class CustomerAuthController extends Controller
 
             return response()->json(['access_token' => $token, 'token_type' => 'Bearer', 'customer' => $customer, 'message' => 'Başarıyla giriş yaptınız.', 'status' => 'success'], 200);
         } else {
-            return response()->json(['message' => 'Kullanıcı adı ya da sifre hatalı!', 'status' => 'error'], 404);
+            return response()->json(['message' => 'Kullanıcı adı ya da şifre hatalı!', 'status' => 'error'], 404);
         }
     }
 
@@ -75,5 +76,48 @@ class CustomerAuthController extends Controller
     {
         Tokens::where('token', $request->header('Authorization'))->delete();
         return response()->json(['message' => 'Çıkış işleminiz tamamlanmıştır.'], 200);
+    }
+
+    public function customerProfile(Request $request, $id)
+    {
+        $customer = Customers::find($id);
+
+        if (!$customer) {
+            return response()->json(['message' => 'Kullanıcı bulunamadı.'], 404);
+        }
+        $token = $request->header('Authorization');
+        $storedToken = Tokens::where('customer_id', $customer->id)->first();
+        if ($storedToken && $storedToken->token === $token) {
+            $favoriteRecipes = $customer->favoriteRecipes;
+            $recipes = [];
+            foreach ($favoriteRecipes as $recipe) {
+                $recipes[] = Recipes::where('id', $recipe->recipe_id)->first();
+            }
+            return response()->json(['customer' => $customer, 'favoriteRecipes' => $recipes], 200);
+        } else {
+            return response()->json(['message' => 'Kullanıcı bulunamadı.'], 404);
+        }
+    }
+
+    public function removeFavoriteRecipe(Request $request, $id)
+    {
+        // dd($request->all(), $id);
+        if (is_null($id)) {
+            return response()->json(['error' => 'ID is required'], 400);
+        }
+        $token = $request->header('Authorization');
+        $storedToken = Tokens::where('token', $token)->first();
+        if ($storedToken) {
+            $customer = $storedToken->customer;
+            $favoriteRecipe = $customer->favoriteRecipes()->where('recipe_id', $id)->first();
+            if ($favoriteRecipe) {
+                $favoriteRecipe->delete();
+                return response()->json(['message' => 'Tarif favorilerinizden kaldırıldı.'], 200);
+            } else {
+                return response()->json(['message' => 'Tarif favorilerinizde bulunmuyor.'], 404);
+            }
+        } else {
+            return response()->json(['message' => 'Invalid token'], 401);
+        }
     }
 }
