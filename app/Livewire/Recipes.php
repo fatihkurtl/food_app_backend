@@ -18,6 +18,7 @@ class Recipes extends Component
         if ($recipe) {
             $recipe->delete();
             session()->flash('success', 'Tarif silindi.');
+            return redirect()->route('admin.recipes');
         } else {
             session()->flash('error', 'Tarif bulunamadı!');
         }

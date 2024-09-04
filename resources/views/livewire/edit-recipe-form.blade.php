@@ -9,6 +9,14 @@
                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>
+        <div class="mb-4">
+            <label for="title_en" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tarif Başlığı (EN)</label>
+            <input type="text" wire:model="title_en" id="title_en" name="title_en" value="{{ old('title_en') }}"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-300">
+            @error('title_en')
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+            @enderror
+        </div>
 
         <!-- Fotoğraf Yükleme -->
         <div class="mb-4">
@@ -41,13 +49,13 @@
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-300">
                     @if ($categories)
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }} - {{ $category->name_en }}</option>
                         @endforeach
 
                     @else
                         <option value="" disabled selected>Kategori Seçin</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }} - {{ $category->name_en }}</option>
                         @endforeach
                         
                     @endif
@@ -73,8 +81,9 @@
 
         <!-- Tarif İçeriği -->
         <div class="mb-4">
-            <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tarif
-                İçeriği</label>
+            <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Tarif İçeriği
+            </label>
             {{-- <textarea id="content" wire:model="content" name="content" rows="6"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm resize-none dark:bg-gray-700 dark:text-gray-300"></textarea> --}}
             <x-markdown wire:model="content" />
@@ -85,6 +94,24 @@
                     görünecek.</p>
             </div> --}}
             @error('content')
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+            @enderror
+        </div>
+        <!-- Tarif İçeriği EN -->
+        <div class="mb-4">
+            <label for="content_en" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Tarif İçeriği (EN)
+            </label>
+            {{-- <textarea id="content" wire:model="content" name="content" rows="6"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm resize-none dark:bg-gray-700 dark:text-gray-300"></textarea> --}}
+            <x-markdown wire:model="content_en" />
+            {{-- <div id="content-preview"
+                class="mt-4 border border-gray-300 rounded-md p-2 bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
+                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Önizleme</h3>
+                <p id="preview-text" class="mt-2 text-gray-700 dark:text-gray-300">Burada tarif içeriği önizlemesi
+                    görünecek.</p>
+            </div> --}}
+            @error('content_en')
                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror
         </div>

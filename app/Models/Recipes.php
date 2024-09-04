@@ -12,8 +12,10 @@ class Recipes extends Model
     protected $fillable = [
         'id',
         'name',
+        'name_en',
         'image',
         'content',
+        'content_en',
         'category_id',
         'likes_count',
         'record_count',

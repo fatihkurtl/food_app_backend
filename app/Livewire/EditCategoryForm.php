@@ -15,27 +15,27 @@ class EditCategoryForm extends Component
     use WithFileUploads;
 
     public $photo;
-
     public $edited_category_id;
+
+    #[Validate('required')]
     public $edited_category_name;
+
+    #[Validate('required|max:255')]
+    public $edited_category_name_en;
+
+    #[Validate('image|max:2024')]
     public $edited_photo;
 
 
     public function editCategory()
     {
-        $this->validate([
-            'edited_category_name' => 'required|max:255',
-            'edited_photo' => 'nullable|image|max:2024',
-        ], [
-            'edited_category_name.required' => 'Kategori adı zorunludur.',
-            'edited_category_name.max' => 'Kategori adı en fazla 255 karakter olmalıdır.',
-            'edited_photo.image' => 'Fotoğraf geçerli bir resim dosyası olmalıdır.',
-            'edited_photo.max' => 'Fotoğraf boyutu en fazla 2MB olmalıdır.',
-        ]);
-
+        // dd($this->edited_category_name_en);
         $category = CategoriesModel::find($this->edited_category_id);
         if ($category) {
             $category->name = $this->edited_category_name;
+            if ($this->edited_category_name_en) {
+                $category->name_en = $this->edited_category_name_en;
+            }
 
             if ($this->edited_photo) {
                 if ($category->image) {
@@ -57,8 +57,10 @@ class EditCategoryForm extends Component
     {
         $this->edited_category_id = $id;
         $this->edited_category_name = CategoriesModel::find($id)->name;
+        $this->edited_category_name_en = CategoriesModel::find($id)->name_en;
 
-        $this->edited_photo = CategoriesModel::find($id)->image;
+        $this->edited_photo = null;
+        $this->photo = CategoriesModel::find($id)->image;
     }
     public function render()
     {

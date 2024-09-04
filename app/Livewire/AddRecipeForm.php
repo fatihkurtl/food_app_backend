@@ -17,6 +17,9 @@ class AddRecipeForm extends Component
 
     #[Validate('required')]
     public $title;
+
+    #[Validate('required')]
+    public $title_en;
     
     #[Validate(['photo.*' => 'image|max:2024'])]
     public $photo;
@@ -27,6 +30,9 @@ class AddRecipeForm extends Component
 
     #[Validate('required')]
     public $content;
+
+    #[Validate('required')]
+    public $content_en;
 
     public function addRecipe()
     {
@@ -54,9 +60,11 @@ class AddRecipeForm extends Component
 
                 $saved_recipe = Recipes::create([
                     'name' => $this->title,
+                    'name_en' => $this->title_en,
                     'image' => $path,
                     'category_id' => $category->id,
                     'content' => $this->content,
+                    'content_en' => $this->content_en,
                     'is_popular' => $this->is_popular,
                 ]);
 

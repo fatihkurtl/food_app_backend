@@ -12,6 +12,7 @@ class Categories extends Model
     protected $fillable = [
         'id',
         'name',
+        'name_en',
         'image',
         // 'recipes_id',
     ];

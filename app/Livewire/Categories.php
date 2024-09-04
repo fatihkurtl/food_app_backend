@@ -14,8 +14,11 @@ class Categories extends Component
     use WithFileUploads;
     public $categories = [];
 
-    #[Validate('max:255')]
+    #[Validate('required|max:255')]
     public $category_name;
+
+    #[Validate('required|max:255')]
+    public $category_name_en;
 
     #[Validate(['photo.*' => 'image|max:2024'])]
     public $photo;
@@ -34,10 +37,12 @@ class Categories extends Component
     {
         $this->validate([
             'category_name' => 'required|max:255',
+            'category_name_en' => 'nullable|max:255',
             'photo' => 'nullable|image|max:2024',
         ], [
             'category_name.required' => 'Kategori adı zorunludur.',
             'category_name.max' => 'Kategori adı en fazla 255 karakter olmalıdır.',
+            'category_name_en.max' => 'Kategori adı en fazla 255 karakter olmalıdır.',
             'photo.image' => 'Fotoğraf geçerli bir resim dosyası olmalıdır.',
             'photo.max' => 'Fotoğraf boyutu en fazla 2MB olmalıdır.',
         ]);
@@ -51,6 +56,7 @@ class Categories extends Component
 
         $category = new CategoriesModel();
         $category->name = $this->category_name;
+        $category->name_en = $this->category_name_en;
 
         if ($this->photo) {
             $path = $this->photo->store('categories', 'public');
@@ -65,45 +71,20 @@ class Categories extends Component
         $this->photo = null;
 
         // dd($this->category_name, $this->photo, $existingCategory->image);
+        return redirect()->route('admin.categories');
+    }
+
+    public function deleteCategory($id)
+    {
+        $category = CategoriesModel::find($id);
+        $category->delete();
+        session()->flash('success', 'Kategori silindi.');
+        return redirect()->route('admin.categories');
     }
 
     public function mount()
     {
         $this->categories = CategoriesModel::all();
-        // $this->categories = [
-        //     [
-        //         'name' => 'Ana Yemekler',
-        //         'photo_url' => 'https://via.placeholder.com/400x200?text=Ana+Yemekler',
-        //     ],
-        //     [
-        //         'name' => 'Tatlılar',
-        //         'photo_url' => 'https://via.placeholder.com/400x200?text=Tatlılar',
-        //     ],
-        //     [
-        //         'name' => 'Çorbalar',
-        //         'photo_url' => 'https://via.placeholder.com/400x200?text=Çorbalar',
-        //     ],
-        //     [
-        //         'name' => 'Salatalar',
-        //         'photo_url' => 'https://via.placeholder.com/400x200?text=Salatalar',
-        //     ],
-        //     [
-        //         'name' => 'Aperatifler',
-        //         'photo_url' => 'https://via.placeholder.com/400x200?text=Aperatifler',
-        //     ],
-        //     [
-        //         'name' => 'İçecekler',
-        //         'photo_url' => 'https://via.placeholder.com/400x200?text=İçecekler',
-        //     ],
-        //     [
-        //         'name' => 'Deniz Ürünleri',
-        //         'photo_url' => 'https://via.placeholder.com/400x200?text=Deniz+Ürünleri',
-        //     ],
-        //     [
-        //         'name' => 'Hamur İşleri',
-        //         'photo_url' => 'https://via.placeholder.com/400x200?text=Hamur+İşleri',
-        //     ],
-        // ];
     }
 
     public function render()

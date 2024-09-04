@@ -24,6 +24,9 @@ class EditRecipeForm extends Component
     #[Validate('required')]
     public $title;
 
+    #[Validate('required')]
+    public $title_en;
+
     #[Validate(['photo.*' => 'image|max:2024'])]
     public $photo;
 
@@ -36,31 +39,24 @@ class EditRecipeForm extends Component
     #[Validate('required')]
     public $content;
 
+    #[Validate('required')]
+    public $content_en;
+
 
     public function editRecipe($id)
     {
-        $this->validate([
-            'title' => 'required',
-            'photo' => 'nullable|image|max:2024',
-            'category_id' => 'required',
-            'content' => 'required',
-        ], [
-            'title.required' => 'Tarif adı zorunludur.',
-            'photo.image' => 'Tarif fotoğrafı geçersiz bir dosya olarak belirlenmiştir.',
-            'category_id.required' => 'Kategori zorunludur.',
-            'content.required' => 'Tarif içeriği zorunludur.',
-        ]);
-
         $recipe = Recipes::findOrFail($id);
-
+        
         $popular_recipes = PopularRecipes::all();
         $popular_recipes = $popular_recipes->where('recipe_id', $recipe->id)->first();
-
+        
         if ($recipe) {
             $recipe->name = $this->title;
+            $recipe->name_en = $this->title_en;
             $recipe->category_id = $this->category_id;
             $recipe->content = $this->content;
-
+            $recipe->content_en = $this->content_en;
+            
             if (!$popular_recipes) {
                 $popular_recipes = new PopularRecipes();
             }
@@ -75,19 +71,20 @@ class EditRecipeForm extends Component
                     $popular_recipes->save();
                 }
             }
-
-            if ($this->photo) {
+            
+            if ($this->photo != null) {
                 if ($recipe->image) {
                     if (Storage::disk('public')->exists($recipe->image)) {
                         Storage::disk('public')->delete($recipe->image);
                     }
                 }
-
+                
                 $filename = $this->photo->store('recipes', 'public');
                 $recipe->image = $filename;
-
-                $recipe->save();
+                
             }
+            $recipe->save();
+            // dd($this->title_en, $this->content_en);
         }
 
         session()->flash('success', 'Tarif güncellendi.');
@@ -102,9 +99,11 @@ class EditRecipeForm extends Component
         $recipe = Recipes::findOrFail($id);
         if ($recipe) {
             $this->title = $recipe->name;
+            $this->title_en = $recipe->name_en;
             $this->existingImage = $recipe->image;
             $this->category_id = $recipe->category_id;
             $this->content = $recipe->content;
+            $this->content_en = $recipe->content_en;
 
             $popular_recipe = PopularRecipes::where('recipe_id', $recipe->id)->first();
 
